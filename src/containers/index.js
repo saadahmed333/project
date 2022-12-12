@@ -5,7 +5,8 @@ import Slider from "../components/slider";
 import Idea from "../components/idea";
 import SimpleSlider from "../components/slider2";
 import Clients from "../components/clients";
-import sideImage from "../assets/sideimage.png"
+import sideImage from "../assets/sideimage.png";
+import Footer from "../components/footer";
 function Home() {
   return (
     <div>
@@ -18,9 +19,10 @@ function Home() {
       <Idea />
       <SimpleSlider />
       <div>
-            <img src={sideImage} alt="" />
-        </div>
+        <img src={sideImage} alt="" />
+      </div>
       <Clients />
+      <Footer />
     </div>
   );
 }
