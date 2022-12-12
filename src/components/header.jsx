@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import {
   ArrowPathIcon,
@@ -16,8 +16,12 @@ import {
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import logo from "../assets/Logo.png";
-import "flowbite";
-import { getAuth, signInWithEmailAndPassword } from "../config/firebaseconfig";
+// import "flowbite";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "../config/firebaseconfig";
 const solutions = [
   {
     name: "Analytics",
@@ -100,17 +104,40 @@ function classNames(...classes) {
 }
 
 export default function Header() {
-  let email;
-  let password;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [signEmail, setSignEmail] = useState("");
+  const [signpassword, setSignPassword] = useState("");
   const auth = getAuth();
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+
+  function SignUp() {
+    createUserWithEmailAndPassword(auth, signEmail, signpassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(error);
+      });
+  }
+  function SignIn() {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        console.log("User SuccessFully Login");
+        setEmail("");
+        setPassword("");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+      });
+  }
   return (
     <>
       <Popover className="relative bg-white">
@@ -234,13 +261,21 @@ export default function Header() {
               </a>
             </Popover.Group>
             <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-              {/* <a href="#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"> */}
+              <button
+                className="block mr-[10px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalCenteredScrollable"
+              >
+                Sign In
+              </button>
               <button
                 className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button"
-                data-modal-toggle="defaultModal"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalScrollable"
               >
-                Sign in
+                Sign Up
               </button>
             </div>
           </div>
@@ -306,13 +341,22 @@ export default function Header() {
                     Contact Us
                   </a>
                 </div>
-                <div>
+                <div className="flex">
+                  <button
+                    className="block mr-[10px] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalCenteredScrollable"
+                  >
+                    sign In
+                  </button>
                   <button
                     className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     type="button"
-                    data-modal-toggle="defaultModal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalScrollable"
                   >
-                    sign in
+                    sign Up
                   </button>
                 </div>
               </div>
@@ -322,53 +366,49 @@ export default function Header() {
       </Popover>
 
       <div>
-        {/* <button className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
-  Toggle modal
-</button> */}
-
         <div
-          id="defaultModal"
+          className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+          id="exampleModalCenteredScrollable"
           tabIndex="-1"
-          aria-hidden="true"
-          className="fixed top-0 left-0 right-0 z-50 hidden w-full  p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
+          aria-labelledby="exampleModalCenteredScrollable"
+          aria-modal="true"
+          role="dialog"
         >
-          <div className="relative w-full h-full max-w-2xl md:h-auto">
-            <div className="relative bg-[#0080FF] p-[50px] rounded-lg shadow dark:bg-gray-700">
-              <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-[30px] font-semibold text-white dark:text-white">
-                  Login
-                </h3>
+          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+            <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-[#0080FF] text-white bg-clip-padding rounded-md outline-none text-current">
+              <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5
+                  className="text-xl font-medium leading-normal text-white"
+                  id="exampleModalCenteredScrollableLabel"
+                >
+                  Sign In
+                </h5>
                 <button
                   type="button"
-                  className="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-toggle="defaultModal"
-                >
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="sr-only">Close modal</span>
-                </button>
+                  className="btn-close box-content w-4 h-4 p-1 text-white border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
-              <div className="p-6 space-y-6">
-                <input type="text" placeholder="Email" className="w-full" />
+              <div className="modal-body p-4 flex flex-col">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="mb-[10px]"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <input
                   type="password"
                   placeholder="Password"
-                  className="w-full"
+                  className="mb-[10px]"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                <div className="w-full flex justify-end pr-[20xp]">
-                  <button className="px-[20px] py-[10px] bg-white text-[#0080FF] font-bold border">
-                    Login
+                <div className="w-full flex justify-end">
+                  <button
+                    className="px-[20px] py-[10px]  bg-white"
+                    onClick={() => SignIn()}
+                  >
+                    Sign In
                   </button>
                 </div>
               </div>
@@ -376,6 +416,58 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      <div>
+        <div
+          className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+          id="exampleModalScrollable"
+          tabIndex="-1"
+          aria-labelledby="exampleModalScrollableLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-scrollable relative w-auto pointer-events-none">
+            <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-[#0080FF] text-white bg-clip-padding rounded-md outline-none text-current">
+              <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5
+                  className="text-xl font-medium leading-normal  text-white"
+                  id="exampleModalScrollableLabel"
+                >
+                  Sign Up
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body flex flex-col relative p-4">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="mb-[10px]"
+                  onChange={(e) => setSignEmail(e.target.value)}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="mb-[10px]"
+                  onChange={(e) => setSignPassword(e.target.value)}
+                />
+                <div className="w-full flex justify-end">
+                  <button
+                    className="px-[20px] py-[10px]  bg-white"
+                    onClick={() => SignUp()}
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
     </>
   );
 }

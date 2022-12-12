@@ -1,8 +1,7 @@
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css"; 
+// import "slick-carousel/slick/slick-theme.css";
 import React, { Component } from "react";
 import Slider from "react-slick";
-import profile from "../assets/profile.png"
 import sliderImage from "../assets/sliderImage.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
