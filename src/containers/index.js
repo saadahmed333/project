@@ -2,6 +2,7 @@ import Header from "../components/header";
 import First from "../components/front";
 import Hovercontext from "../components/hovercontext";
 import Slider from "../components/slider";
+import Idea from "../components/idea";
 function Home() {
   return (
     <div>
@@ -11,6 +12,7 @@ function Home() {
       <First />
       <Hovercontext />
       <Slider />
+      <Idea />
     </div>
   );
 }
