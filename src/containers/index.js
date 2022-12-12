@@ -1,7 +1,7 @@
 import Header from "../components/header";
 import First from "../components/front";
 import Hovercontext from "../components/hovercontext";
-import Slider from "../components/slider";
+import Sliders from "../components/slider";
 import Idea from "../components/idea";
 import SimpleSlider from "../components/slider2";
 import Clients from "../components/clients";
@@ -15,7 +15,7 @@ function Home() {
       </div>
       <First />
       <Hovercontext />
-      <Slider />
+      <Sliders />
       <Idea />
       <SimpleSlider />
       <div>
