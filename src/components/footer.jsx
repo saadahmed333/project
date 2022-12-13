@@ -9,7 +9,7 @@ function Footer() {
           <img src={logo} alt="" />
         </div>
         <div>
-          <h1 className="text-[30px] w-[400px]">
+          <h1 className="text-[20px] sm:text-[30px] sm:w-[400px]">
             A Young Digital Agency In The Heart of New Jersey
           </h1>
         </div>
